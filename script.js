@@ -22,6 +22,18 @@
       ]
     },
     {
+      id: 'renewables-costing',
+      title: 'renewable storage valuation (psh)',
+      year: '2025',
+      stack: 'python · numpy-financial · latex',
+      desc: 'capital budgeting & multi-decadal valuation framework comparing modular micro-psh, strategic 200mw pumped hydro, and utility bess under dynamic market saturation.',
+      image: 'assets/psh-roi-trajectory.png',
+      links: [
+        { label: 'pdf', url: 'assets/psh_costing.pdf' },
+        { label: 'code', url: 'https://github.com/joehamper/renewables_costing' }
+      ]
+    },
+    {
       id: 'stock-picker',
       title: 'quant equities & spike predictor',
       year: '2023',
@@ -29,18 +41,6 @@
       desc: 'momentum and volatility spike forecasting using historical WRDS feeds with analytical leaderboards.',
       links: [
         { label: 'code', url: 'https://github.com/joehamper/stock_picker_game' }
-      ]
-    },
-    {
-      id: 'renewables-costing',
-      title: 'renewable storage valuation (psh)',
-      year: '2026',
-      stack: 'python · numpy-financial · latex',
-      desc: 'capital budgeting & multi-decadal valuation framework comparing modular micro-psh, strategic 200mw pumped hydro, and utility bess under dynamic market saturation.',
-      image: 'assets/psh-roi-trajectory.png',
-      links: [
-        { label: 'pdf', url: 'assets/psh_costing.pdf' },
-        { label: 'code', url: 'https://github.com/joehamper/renewables_costing' }
       ]
     },
     {
@@ -124,6 +124,14 @@
 
     document.body.appendChild(container);
 
+    // 3. Discreet Background CA Iterator Button
+    const iterateBtn = document.createElement('button');
+    iterateBtn.id = 'btn-iterate';
+    iterateBtn.className = 'btn btn-iterate';
+    iterateBtn.title = 'Iterate background cellular automata [i]';
+    iterateBtn.textContent = 'iterate';
+    document.body.appendChild(iterateBtn);
+
     bindEvents();
     initLifeGridCanvas(canvas);
   }
@@ -133,6 +141,7 @@
   // --------------------------------------------------------------------------
   function bindEvents() {
     const themeBtn = document.getElementById('btn-theme');
+    const iterateBtn = document.getElementById('btn-iterate');
     const savedTheme = localStorage.getItem('hub_theme');
     
     function applyTheme(isDark) {
@@ -156,6 +165,17 @@
         const isDark = document.body.classList.contains('dark-mode');
         applyTheme(!isDark);
       });
+    }
+
+    function triggerIteration() {
+      const canvas = document.getElementById('bg-canvas');
+      if (canvas && canvas._iterate) {
+        canvas._iterate();
+      }
+    }
+
+    if (iterateBtn) {
+      iterateBtn.addEventListener('click', triggerIteration);
     }
 
     // Individual collapsible project rows
@@ -210,12 +230,14 @@
       });
     }
 
-    // Keyboard shortcut [T] for theme
+    // Keyboard shortcuts: [T] for theme, [I] for iterate
     document.addEventListener('keydown', (e) => {
       if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
       if (e.key === 't' || e.key === 'T') {
         const isDark = document.body.classList.contains('dark-mode');
         applyTheme(!isDark);
+      } else if (e.key === 'i' || e.key === 'I') {
+        triggerIteration();
       }
     });
   }
@@ -283,6 +305,68 @@
       return grid;
     }
 
+    function stepLifeState(cols, rows) {
+      if (!lifeState || lifeState.length !== cols * rows) {
+        lifeState = computeLifeState(cols, rows);
+        return;
+      }
+
+      const size = cols * rows;
+      let next = new Uint8Array(size);
+      let aliveCount = 0;
+
+      for (let r = 0; r < rows; r++) {
+        const rPrev = (r === 0 ? rows - 1 : r - 1) * cols;
+        const rCurr = r * cols;
+        const rNext = (r === rows - 1 ? 0 : r + 1) * cols;
+
+        for (let c = 0; c < cols; c++) {
+          if (r < 5) {
+            next[rCurr + c] = 0;
+            continue;
+          }
+
+          const cPrev = c === 0 ? cols - 1 : c - 1;
+          const cNext = c === cols - 1 ? 0 : c + 1;
+
+          const neighbors =
+            lifeState[rPrev + cPrev] + lifeState[rPrev + c] + lifeState[rPrev + cNext] +
+            lifeState[rCurr + cPrev]                        + lifeState[rCurr + cNext] +
+            lifeState[rNext + cPrev] + lifeState[rNext + c] + lifeState[rNext + cNext];
+
+          const idx = rCurr + c;
+          const alive = lifeState[idx];
+
+          if (alive === 1) {
+            if (neighbors === 2 || neighbors === 3) {
+              next[idx] = 1;
+              aliveCount++;
+            } else {
+              next[idx] = 0;
+            }
+          } else {
+            if (neighbors === 3) {
+              next[idx] = 1;
+              aliveCount++;
+            } else {
+              next[idx] = 0;
+            }
+          }
+        }
+      }
+
+      // If all cells died out, reseed sparsely
+      if (aliveCount === 0) {
+        for (let r = 5; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            if (Math.random() < 0.12) next[r * cols + c] = 1;
+          }
+        }
+      }
+
+      lifeState = next;
+    }
+
     function renderGrid() {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const width = window.innerWidth;
@@ -336,7 +420,18 @@
       ctx.restore();
     }
 
+    function iterate() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const cols = Math.ceil(width / GRID_SIZE) + 1;
+      const rows = Math.ceil(height / GRID_SIZE) + 1;
+      stepLifeState(cols, rows);
+      renderGrid();
+    }
+
     canvas._renderGrid = renderGrid;
+    canvas._iterate = iterate;
+
     window.addEventListener('resize', () => {
       lifeState = null;
       renderGrid();
