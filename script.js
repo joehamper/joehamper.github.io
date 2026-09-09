@@ -14,7 +14,7 @@
       desc: 'data visualisation of global energy production and GDP, including carbon intensity and decoupling.',
       links: [
         { label: 'demo', url: 'energy-and-gdp/' },
-        { label: 'code', url: 'https://github.com/joe/energy-and-gdp' }
+        { label: 'code', url: 'https://github.com/joehamper/energy-and-gdp' }
       ]
     },
     {
@@ -22,7 +22,7 @@
       title: 'quant equities & spike predictor',
       desc: 'momentum and volatility spike forecasting using historical WRDS feeds with analytical leaderboards.',
       links: [
-        { label: 'code', url: 'https://github.com/joe/stock_picker_game' }
+        { label: 'code', url: 'https://github.com/joehamper/stock_picker_game' }
       ]
     },
     {
@@ -30,7 +30,7 @@
       title: 'renewable storage valuation (psh)',
       desc: 'capital budgeting & LCOE model comparing micro pumped storage hydro vs battery storage.',
       links: [
-        { label: 'code', url: 'https://github.com/joe/renewables_costing' }
+        { label: 'code', url: 'https://github.com/joehamper/renewables_costing' }
       ]
     },
     {
@@ -38,7 +38,7 @@
       title: 'corporate sustainability (esrs) nlp',
       desc: 'document AI pipeline extracting physical metrics and units from corporate filings for CSRD compliance.',
       links: [
-        { label: 'code', url: 'https://github.com/joe/data_extractionv2' }
+        { label: 'code', url: 'https://github.com/joehamper/data_extractionv2' }
       ]
     }
   ];
@@ -54,7 +54,7 @@
           <div class="discipline">quantitative analytics + systems</div>
         </div>
         <nav class="nav">
-          <a href="https://github.com" target="_blank" rel="noopener" class="btn">github</a>
+          <a href="https://github.com/joehamper" target="_blank" rel="noopener" class="btn">github</a>
           <button id="btn-theme" class="btn">dark</button>
         </nav>
       </header>
@@ -80,7 +80,7 @@
           <span>projects &amp; demos</span>
         </div>
         <div class="footer-right">
-          <a href="https://github.com" target="_blank" rel="noopener">github.com</a>
+          <a href="https://github.com/joehamper" target="_blank" rel="noopener">github.com/joehamper</a>
         </div>
       </footer>
     `;
