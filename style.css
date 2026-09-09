@@ -219,68 +219,6 @@ body {
   text-decoration: underline;
 }
 
-/* --------------------------------------------------------------------------
-   PLAIN-TEXT CV MODAL
-   -------------------------------------------------------------------------- */
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
-  z-index: 1000;
-}
-
-body.dark-mode .modal {
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.modal.hidden {
-  display: none;
-}
-
-.modal-dialog {
-  width: 100%;
-  max-width: 780px;
-  max-height: 85vh;
-  background-color: var(--bg);
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 18px;
-  border-bottom: 1px solid var(--border-subtle);
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.modal-body {
-  padding: 24px;
-  overflow-y: auto;
-}
-
-.cv-pre {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--fg);
-  white-space: pre-wrap;
-}
 
 /* --------------------------------------------------------------------------
    RESPONSIVE

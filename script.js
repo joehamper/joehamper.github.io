@@ -1,6 +1,7 @@
 /**
- * HUB 0.2 // UTILITARIAN TECH
- * Clean client script: zero default HTML, no fluff, no fake telemetry.
+ * HUB 0.2 // DEMO SHOWCASE
+ * Client script: showcases project demos and repositories.
+ * Pure typography, zero CV/contact clutter, zero dependencies.
  */
 
 (function () {
@@ -10,7 +11,7 @@
     {
       id: 'energy-and-gdp',
       title: 'global energy & gdp observatory',
-      desc: '10-year interactive decoupling analysis of GDP from carbon intensity across 50+ electricity grids. Zero-build vanilla JS + D3.',
+      desc: 'data visualisation of global energy production and GDP, including carbon intensity and decoupling.',
       links: [
         { label: 'demo', url: 'energy-and-gdp/' },
         { label: 'code', url: 'https://github.com/joe/energy-and-gdp' }
@@ -19,7 +20,7 @@
     {
       id: 'stock-picker',
       title: 'quant equities & spike predictor',
-      desc: 'Systematic momentum and volatility spike forecasting validated on historical WRDS feeds with automated analytical leaderboards.',
+      desc: 'momentum and volatility spike forecasting using historical WRDS feeds with analytical leaderboards.',
       links: [
         { label: 'code', url: 'https://github.com/joe/stock_picker_game' }
       ]
@@ -27,7 +28,7 @@
     {
       id: 'renewables-costing',
       title: 'renewable storage valuation (psh)',
-      desc: '50-year capital budgeting & LCOE model comparing micro pumped storage hydro vs battery storage. Python + LaTeX.',
+      desc: 'capital budgeting & LCOE model comparing micro pumped storage hydro vs battery storage.',
       links: [
         { label: 'code', url: 'https://github.com/joe/renewables_costing' }
       ]
@@ -35,34 +36,12 @@
     {
       id: 'data-extraction',
       title: 'corporate sustainability (esrs) nlp',
-      desc: 'Document AI pipeline harvesting physical metrics and units from 200+ page corporate filings for CSRD compliance. Streamlit + PyMuPDF.',
+      desc: 'document AI pipeline extracting physical metrics and units from corporate filings for CSRD compliance.',
       links: [
         { label: 'code', url: 'https://github.com/joe/data_extractionv2' }
       ]
     }
   ];
-
-  const CV_TEXT = `joe
-quantitative analytics + systems
-contact@example.com · github.com/joe
-
-focus
-quantitative equities, empirical finance, energy project finance,
-document ai & unstructured nlp, zero-overhead analytical software.
-
-projects
-01. global energy & gdp observatory (2014-2024)
-    vanilla js, d3.js, maplibre gl. client-side zero-build.
-02. quant equities & spike predictor
-    r (dplyr, data.table, zoo), python, wrds historical feeds.
-03. renewable storage valuation (50-year psh model)
-    python (numpy-financial), dcf / lcoe, latex publication.
-04. corporate sustainability (esrs) document ai
-    python, pymupdf, quantulum3, streamlit.
-
-stack
-python, r, javascript, swift, sql, c.
-`;
 
   function mount() {
     const container = document.createElement('div');
@@ -76,8 +55,6 @@ python, r, javascript, swift, sql, c.
         </div>
         <nav class="nav">
           <a href="https://github.com" target="_blank" rel="noopener" class="btn">github</a>
-          <button id="btn-cv" class="btn">cv</button>
-          <a href="mailto:contact@example.com" class="btn">contact</a>
           <button id="btn-theme" class="btn">dark</button>
         </nav>
       </header>
@@ -100,27 +77,12 @@ python, r, javascript, swift, sql, c.
         <div class="footer-left">
           <span>joe</span>
           <span>·</span>
-          <span>quantitative analytics + systems</span>
+          <span>projects &amp; demos</span>
         </div>
         <div class="footer-right">
-          <a href="mailto:contact@example.com">contact@example.com</a>
+          <a href="https://github.com" target="_blank" rel="noopener">github.com</a>
         </div>
       </footer>
-
-      <div id="cv-modal" class="modal hidden" role="dialog" aria-modal="true">
-        <div class="modal-dialog">
-          <div class="modal-bar">
-            <span>curriculum vitae</span>
-            <div class="modal-actions">
-              <button id="btn-copy-cv" class="btn">copy</button>
-              <button id="btn-close-cv" class="btn">close</button>
-            </div>
-          </div>
-          <div class="modal-body">
-            <pre class="cv-pre" id="cv-content">${CV_TEXT}</pre>
-          </div>
-        </div>
-      </div>
     `;
 
     document.body.appendChild(container);
@@ -128,7 +90,6 @@ python, r, javascript, swift, sql, c.
   }
 
   function bindEvents() {
-    // Theme toggle
     const themeBtn = document.getElementById('btn-theme');
     const savedTheme = localStorage.getItem('hub_theme');
     
@@ -153,52 +114,11 @@ python, r, javascript, swift, sql, c.
       });
     }
 
-    // CV Modal
-    const modal = document.getElementById('cv-modal');
-    const openCvBtn = document.getElementById('btn-cv');
-    const closeCvBtn = document.getElementById('btn-close-cv');
-    const copyCvBtn = document.getElementById('btn-copy-cv');
-
-    function openModal() {
-      if (modal) modal.classList.remove('hidden');
-    }
-
-    function closeModal() {
-      if (modal) modal.classList.add('hidden');
-    }
-
-    if (openCvBtn) openCvBtn.addEventListener('click', openModal);
-    if (closeCvBtn) closeCvBtn.addEventListener('click', closeModal);
-    if (modal) {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-      });
-    }
-
-    if (copyCvBtn) {
-      copyCvBtn.addEventListener('click', () => {
-        if (navigator.clipboard) {
-          navigator.clipboard.writeText(CV_TEXT).then(() => {
-            copyCvBtn.textContent = 'copied';
-            setTimeout(() => { copyCvBtn.textContent = 'copy'; }, 1500);
-          });
-        }
-      });
-    }
-
-    // Keyboard shortcuts: ESC to close modal, T to toggle theme, C for CV
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeModal();
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
       if (e.key === 't' || e.key === 'T') {
         const isDark = document.body.classList.contains('dark-mode');
         applyTheme(!isDark);
-      }
-      if (e.key === 'c' || e.key === 'C') {
-        if (modal && modal.classList.contains('hidden')) {
-          openModal();
-        } else {
-          closeModal();
-        }
       }
     });
   }
