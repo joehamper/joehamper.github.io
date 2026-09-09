@@ -34,10 +34,12 @@
     {
       id: 'renewables-costing',
       title: 'renewable storage valuation (psh)',
-      year: '2023',
+      year: '2026',
       stack: 'python · numpy-financial · latex',
-      desc: 'capital budgeting & LCOE model comparing micro pumped storage hydro vs battery storage.',
+      desc: 'capital budgeting & multi-decadal valuation framework comparing modular micro-psh, strategic 200mw pumped hydro, and utility bess under dynamic market saturation.',
+      image: 'assets/psh-roi-trajectory.png',
       links: [
+        { label: 'pdf', url: 'assets/psh_costing.pdf' },
         { label: 'code', url: 'https://github.com/joehamper/renewables_costing' }
       ]
     },
@@ -102,12 +104,18 @@
               <p class="project-desc">${p.desc}</p>
               ${(p.imageLight && p.imageDark) ? `
                 <div class="project-preview">
-                  <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title} Demo">
+                  <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
                     <img src="${p.imageLight}" alt="${p.title} light preview" class="preview-img img-light">
                     <img src="${p.imageDark}" alt="${p.title} dark preview" class="preview-img img-dark">
                   </a>
                 </div>
-              ` : ''}
+              ` : (p.image ? `
+                <div class="project-preview">
+                  <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
+                    <img src="${p.image}" alt="${p.title} preview" class="preview-img">
+                  </a>
+                </div>
+              ` : '')}
             </div>
           </article>
         `).join('')}
