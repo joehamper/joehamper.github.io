@@ -112,15 +112,6 @@
           </article>
         `).join('')}
       </main>
-
-      <footer class="footer">
-        <div class="footer-left">
-          <span>quantitative analytics + systems</span>
-        </div>
-        <div class="footer-right">
-          <a href="https://github.com/joehamper" target="_blank" rel="noopener">github.com/joehamper</a>
-        </div>
-      </footer>
     `;
 
     document.body.appendChild(container);
@@ -237,9 +228,11 @@
       let grid = new Uint8Array(size);
       let next = new Uint8Array(size);
 
-      // Seed sparsely (~14% random probability)
-      for (let i = 0; i < size; i++) {
-        grid[i] = Math.random() < 0.14 ? 1 : 0;
+      // Seed sparsely (~14% random probability), keeping the top rows clear for masthead
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          grid[r * cols + c] = (r < 5) ? 0 : (Math.random() < 0.14 ? 1 : 0);
+        }
       }
 
       // Run 32 generations of Conway B3/S23 rules (takes < 0.3ms)
@@ -251,6 +244,11 @@
           const rNext = (r === rows - 1 ? 0 : r + 1) * cols;
 
           for (let c = 0; c < cols; c++) {
+            if (r < 5) {
+              next[rCurr + c] = 0;
+              continue;
+            }
+
             const cPrev = c === 0 ? cols - 1 : c - 1;
             const cNext = c === cols - 1 ? 0 : c + 1;
 

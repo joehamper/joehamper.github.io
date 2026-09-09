@@ -1,10 +1,11 @@
 /* ==========================================================================
-   HUB 0.2 // UTILITARIAN TECH (UNIFIED MONOLITH & GRID-SNAPPED)
+   HUB 0.2 // UTILITARIAN TECH (MONOLITHIC LEDGER & MINIMAL MASTHEAD)
    - Strict monochrome (black & white)
    - 1px hairline borders, zero border-radius
    - Mathematical 32px grid-snapped spacing
+   - Flush borderless masthead aligned with ledger datums
    - Unified project ledger (continuous architectural matrix)
-   - Solid high-contrast surfaces (no glass/blur)
+   - No redundant footer
    ========================================================================== */
 
 @font-face {
@@ -32,16 +33,16 @@
 }
 
 body.dark-mode {
-  --bg: #0a0a0a;
+  --bg: #0c0c0c;
   --fg: #f5f5f5;
   --fg-muted: #888888;
   --fg-subtle: #666666;
   --border: #f5f5f5;
   --border-subtle: #222222;
-  --surface: #0a0a0a;
-  --surface-alt: #111111;
+  --surface: #0c0c0c;
+  --surface-alt: #141414;
   --surface-inv: #f5f5f5;
-  --fg-inv: #0a0a0a;
+  --fg-inv: #0c0c0c;
 }
 
 * {
@@ -63,7 +64,7 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   min-height: 100vh;
-  padding: 64px 32px 96px; /* Multiples of 32px */
+  padding: 64px 32px 128px; /* Multiples of 32px, deep bottom space */
   display: flex;
   justify-content: center;
   position: relative;
@@ -71,7 +72,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   STATIC BACKGROUND CANVAS (CONNECTED GRID & DOT MATRIX)
+   STATIC BACKGROUND CANVAS (GAME OF LIFE CA + DOT MATRIX)
    -------------------------------------------------------------------------- */
 #bg-canvas {
   position: fixed;
@@ -91,23 +92,23 @@ body {
   max-width: 896px;
   display: flex;
   flex-direction: column;
-  gap: 64px; /* 2 * 32px */
+  gap: 48px;
   position: relative;
   z-index: 1;
 }
 
 /* --------------------------------------------------------------------------
-   MASTHEAD (SOLID PLANAR BLOCK)
+   MASTHEAD (FLUSH ALIGNED, PRISTINE)
    -------------------------------------------------------------------------- */
 .masthead {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-end;
   gap: 32px;
   flex-wrap: wrap;
-  padding: 32px;
-  border: 1px solid var(--border);
-  background-color: var(--surface);
+  padding: 16px 0;
+  border: none;
+  background: transparent;
 }
 
 .identity {
@@ -326,37 +327,6 @@ body.dark-mode .img-light {
 }
 
 /* --------------------------------------------------------------------------
-   FOOTER (SOLID PLANAR BLOCK - NO "JOE")
-   -------------------------------------------------------------------------- */
-.footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 32px;
-  border: 1px solid var(--border);
-  background-color: var(--surface);
-  font-size: 13px;
-  color: var(--fg-muted);
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.footer-left {
-  display: flex;
-  gap: 16px;
-}
-
-.footer a {
-  color: var(--fg-muted);
-  text-decoration: none;
-}
-
-.footer a:hover {
-  color: var(--fg);
-  text-decoration: underline;
-}
-
-/* --------------------------------------------------------------------------
    RESPONSIVE
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
@@ -365,12 +335,11 @@ body.dark-mode .img-light {
   }
   
   .hub-container {
-    gap: 32px;
+    gap: 24px;
   }
 
   .masthead,
-  .project-header,
-  .footer {
+  .project-header {
     padding: 20px 16px;
   }
 
