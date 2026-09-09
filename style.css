@@ -1,9 +1,10 @@
 /* ==========================================================================
-   HUB 0.2 // UTILITARIAN TECH (TYPESETTING & EXPANSIVE WHITE SPACE)
+   HUB 0.2 // UTILITARIAN TECH (TYPESETTING & PARALLAX GLASS)
    - Strict monochrome (black & white)
    - 1px hairline borders, zero border-radius
-   - Generous vertical whitespace and deliberate typographic hierarchy
-   - No fluff, no brackets, no unnecessary labels
+   - Generous vertical whitespace
+   - Frosted backdrop-filter blur on foreground elements
+   - Fixed background parallax canvas
    ========================================================================== */
 
 @font-face {
@@ -20,6 +21,8 @@
   --fg-muted: #555555;
   --border: #000000;
   --border-subtle: #eaeaea;
+  --surface-glass: rgba(255, 255, 255, 0.72);
+  --surface-glass-hover: rgba(255, 255, 255, 0.92);
   --surface-inv: #000000;
   --fg-inv: #ffffff;
   
@@ -32,6 +35,8 @@ body.dark-mode {
   --fg-muted: #888888;
   --border: #f5f5f5;
   --border-subtle: #222222;
+  --surface-glass: rgba(12, 12, 12, 0.72);
+  --surface-glass-hover: rgba(12, 12, 12, 0.92);
   --surface-inv: #f5f5f5;
   --fg-inv: #0c0c0c;
 }
@@ -55,25 +60,41 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   min-height: 100vh;
-  padding: 110px 48px 140px;
+  padding: 96px 40px 140px;
   display: flex;
   justify-content: center;
-  transition: background-color 0.12s ease, color 0.12s ease;
+  position: relative;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 /* --------------------------------------------------------------------------
-   LAYOUT CONTAINER (LARGE VERTICAL RHYTHM & BREATHING ROOM)
+   FIXED PARALLAX CANVAS BACKGROUND
+   -------------------------------------------------------------------------- */
+#bg-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   LAYOUT CONTAINER (GENEROUS VERTICAL RHYTHM)
    -------------------------------------------------------------------------- */
 .hub-container {
   width: 100%;
   max-width: 860px;
   display: flex;
   flex-direction: column;
-  gap: 100px;
+  gap: 80px;
+  position: relative;
+  z-index: 1;
 }
 
 /* --------------------------------------------------------------------------
-   MASTHEAD & IDENTITY (TYPESETTING)
+   MASTHEAD (FROSTED GLASS PANEL)
    -------------------------------------------------------------------------- */
 .masthead {
   display: flex;
@@ -81,8 +102,11 @@ body {
   align-items: flex-start;
   gap: 32px;
   flex-wrap: wrap;
-  padding-bottom: 40px;
-  border-bottom: 1px solid var(--border);
+  padding: 28px 32px;
+  border: 1px solid var(--border);
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .identity {
@@ -111,7 +135,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   BUTTONS (NO BRACKETS, CLEAN 1PX HAIRLINE BORDER)
+   BUTTONS (NO BRACKETS, 1PX HAIRLINE)
    -------------------------------------------------------------------------- */
 .btn {
   font-family: var(--font-mono);
@@ -141,25 +165,29 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   PROJECTS (EXPANSIVE VERTICAL SPACE, CLEAN BRUTALIST LIST)
+   PROJECTS (FROSTED BRUTALIST PANELS WITH PARALLAX BLUR)
    -------------------------------------------------------------------------- */
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 28px;
 }
 
 .project-item {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-bottom: 48px;
-  border-bottom: 1px solid var(--border-subtle);
+  gap: 14px;
+  padding: 28px 32px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.project-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.project-item:hover {
+  border-color: var(--border);
+  background-color: var(--surface-glass-hover);
 }
 
 .project-header {
@@ -190,14 +218,17 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   FOOTER (QUIET, EXPANSIVE)
+   FOOTER (FROSTED PANEL)
    -------------------------------------------------------------------------- */
 .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 32px;
-  border-top: 1px solid var(--border-subtle);
+  padding: 20px 32px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   font-size: 13px;
   color: var(--fg-muted);
   flex-wrap: wrap;
@@ -219,17 +250,22 @@ body {
   text-decoration: underline;
 }
 
-
 /* --------------------------------------------------------------------------
    RESPONSIVE
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   body {
-    padding: 48px 20px 80px;
+    padding: 40px 16px 80px;
   }
   
   .hub-container {
-    gap: 64px;
+    gap: 48px;
+  }
+
+  .masthead,
+  .project-item,
+  .footer {
+    padding: 20px 20px;
   }
 
   .name {
