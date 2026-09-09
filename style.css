@@ -23,6 +23,7 @@
   --fg-subtle: #888888;
   --border: #000000;
   --border-subtle: #e4e4e4;
+  --border-dashed: #cccccc;
   --surface: #ffffff;
   --surface-alt: #fbfbfb;
   --surface-inv: #000000;
@@ -41,6 +42,7 @@ body.dark-mode {
   --fg-subtle: #666666;
   --border: #f5f5f5;
   --border-subtle: #222222;
+  --border-dashed: #383838;
   --surface: #0c0c0c;
   --surface-alt: #141414;
   --surface-inv: #f5f5f5;
@@ -65,9 +67,9 @@ body {
   background-color: var(--bg);
   color: var(--fg);
   min-height: 100vh;
-  padding: 64px 32px 128px; /* Multiples of 32px, deep bottom space */
+  padding: clamp(32px, 5vw, 64px) clamp(16px, 4vw, 48px) 128px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   transition:
     background-color 0.12s ease,
@@ -109,7 +111,7 @@ body {
   align-items: flex-end;
   gap: 32px;
   flex-wrap: wrap;
-  padding: 16px 0;
+  padding: 0;
   border: none;
   background: transparent;
 }
@@ -131,6 +133,7 @@ body {
   font-family: var(--font-mono);
   font-size: 15px;
   color: var(--fg-muted);
+  text-transform: lowercase;
 }
 
 .header-bio {
@@ -169,6 +172,7 @@ body {
   transition:
     background-color 0.08s ease,
     color 0.08s ease;
+  text-transform: lowercase;
 }
 
 .btn:hover {
@@ -191,24 +195,42 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   UNIFIED PROJECT LEDGER (CONTINUOUS ARCHITECTURAL MATRIX)
+   CLEAN PROJECT LIST (SEPARATED BY DASHED LINES)
    -------------------------------------------------------------------------- */
+.projects-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0 4px;
+}
+
+.section-title {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+}
+
 .projects-ledger {
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--border-subtle);
-  background-color: var(--surface);
+  border-top: 1px dashed var(--border-dashed);
+  background: transparent;
 }
 
 .project-row {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid var(--border-subtle);
-  transition: background-color 0.08s ease;
-}
-
-.project-row:last-child {
-  border-bottom: none;
+  border-bottom: 1px dashed var(--border-dashed);
+  transition: background-color 0.1s ease;
 }
 
 .project-row:hover {
@@ -218,60 +240,46 @@ body {
 .project-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  padding: 24px 32px;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 8px;
   cursor: pointer;
   user-select: none;
 }
 
-.header-meta-group {
+.project-title-group {
   display: flex;
-  align-items: flex-start;
-  gap: 14px;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
-.toggle-indicator {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: bold;
-  color: var(--fg-muted);
-  width: 14px;
-  line-height: 1.3;
-  display: inline-flex;
-  justify-content: center;
-  margin-top: 11px;
+/* Square Dotpoint */
+.square-bullet {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background-color: var(--fg);
+  flex-shrink: 0;
+  transition: background-color 0.12s ease;
 }
 
-.title-and-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+.project-row:hover .square-bullet {
+  background-color: #2e7d32;
+}
+
+body.dark-mode .project-row:hover .square-bullet {
+  background-color: #86efac;
 }
 
 .project-title {
-  display: inline-block;
-  width: fit-content;
-  font-size: 19px;
-  font-weight: bold;
-  color: var(--fg);
-  letter-spacing: -0.01em;
-  background: rgba(144, 238, 144, 0.46);
-  padding: 0px 10px;
-}
-
-body.dark-mode .project-title {
-  background: rgba(144, 238, 144, 0.28);
-}
-
-.project-stack {
+  word-break: break-word;
+  text-transform: uppercase;
   font-family: var(--font-mono);
-  font-size: 13px;
-  color: var(--fg-muted);
-  letter-spacing: 0.02em;
 }
 
-.header-right {
+.project-header-right {
   display: flex;
   align-items: center;
   gap: 16px;
@@ -284,21 +292,62 @@ body.dark-mode .project-title {
   color: var(--fg-subtle);
 }
 
-.project-actions {
+/* Right-aligned Down Arrow */
+.toggle-arrow {
   display: inline-flex;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  color: var(--fg-muted);
+  flex-shrink: 0;
+  transition:
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.15s ease;
 }
 
-/* Collapsible Content Body */
+.project-row:hover .toggle-arrow {
+  color: var(--fg);
+}
+
+.project-row.expanded .toggle-arrow {
+  transform: rotate(180deg);
+  color: var(--fg);
+}
+
+/* --------------------------------------------------------------------------
+   EXPANDED PROJECT BODY (METRICS, STACK, DESC, ACTIONS, PREVIEW)
+   -------------------------------------------------------------------------- */
 .project-body {
   display: none;
   flex-direction: column;
-  gap: 20px;
-  padding: 0 32px 32px 60px; /* Aligns with text indentation */
+  gap: 18px;
+  padding: 4px 8px 24px 27px; /* Aligns neatly past the square dotpoint */
 }
 
 .project-row.expanded .project-body {
   display: flex;
+}
+
+.project-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.project-stack {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--fg-muted);
+  letter-spacing: 0.02em;
+}
+
+.project-year {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--fg-subtle);
 }
 
 .project-desc {
@@ -306,6 +355,13 @@ body.dark-mode .project-title {
   color: var(--fg-muted);
   line-height: 1.65;
   max-width: 720px;
+}
+
+.project-actions {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 /* Embedded Demo Preview Image */
@@ -352,44 +408,87 @@ body.dark-mode .img-light {
 }
 
 /* --------------------------------------------------------------------------
-   RESPONSIVE
+   DYNAMIC CSS RESPONSIVE DESIGN (ZERO JS)
+   Accounts elegantly for smaller screens and edge sizes
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-  body {
-    padding: 32px 16px 64px;
-  }
-
   .hub-container {
-    gap: 24px;
+    gap: 32px;
   }
 
-  .masthead,
+  .masthead {
+    gap: 20px;
+  }
+
   .project-header {
-    padding: 20px 16px;
+    padding: 14px 6px;
   }
 
   .project-body {
-    padding: 0 16px 20px 16px;
+    padding: 2px 6px 20px 22px;
+  }
+
+  .preview-img {
+    max-height: 280px;
+  }
+}
+
+@media (max-width: 600px) {
+  .masthead {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .nav {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .name {
     font-size: 26px;
   }
 
-  .project-header {
+  .project-meta-bar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 4px;
   }
 
-  .header-right {
+  .project-actions {
     width: 100%;
-    justify-content: space-between;
   }
 
   .btn-iterate {
     bottom: 16px;
     right: 16px;
+  }
+}
+
+@media (max-width: 440px) {
+  body {
+    padding: 24px 14px 72px;
+  }
+
+  .project-header {
+    padding: 12px 2px;
+    gap: 10px;
+  }
+
+  .project-title-group {
+    gap: 8px;
+  }
+
+  .project-header-right {
+    gap: 10px;
+  }
+
+  .project-year {
+    font-size: 12px;
+  }
+
+  .project-body {
+    padding: 2px 2px 18px 12px;
   }
 }
 

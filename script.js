@@ -71,56 +71,66 @@
     container.innerHTML = `
       <header class="masthead">
         <div class="identity">
-          <h1 class="name">joseph hamper</h1>
-          <div class="discipline">quantitative analytics + systems</div>
-          <p class="header-bio">a collection of small coding projects i have worked on in my spare time, spanning quantitative analytics, energy storage systems, and data tools.</p>
+          <h1 class="name">Joseph Hamper</h1>
+          <div class="discipline">Quantitative Analytics + Systems</div>
+          <p class="header-bio">A collection of small coding projects I have worked on in my spare time, spanning quantitative analytics, energy storage systems, and data tools.</p>
         </div>
         <nav class="nav">
-          <button id="btn-toggle-all" class="btn btn-toggle">+ expand all</button>
-          <a href="https://github.com/joehamper" target="_blank" rel="noopener" class="btn">github</a>
-          <button id="btn-theme" class="btn">dark</button>
+          <button id="btn-toggle-all" class="btn btn-toggle">Expand All</button>
+          <a href="https://github.com/joehamper" target="_blank" rel="noopener" class="btn">GitHub</a>
+          <button id="btn-theme" class="btn">Dark</button>
         </nav>
       </header>
 
-      <!-- UNIFIED PROJECT LEDGER -->
-      <main class="projects-ledger">
-        ${PROJECTS.map(p => `
-          <article class="project-row" id="${p.id}">
-            <div class="project-header" tabindex="0" role="button" aria-expanded="false">
-              <div class="header-meta-group">
-                <span class="toggle-indicator">+</span>
-                <div class="title-and-stack">
-                  <h2 class="project-title">${p.title}</h2>
+      <!-- CLEAN PROJECT LIST -->
+      <section class="projects-section">
+        <div class="section-heading">
+          <h2 class="section-title">projects</h2>
+        </div>
+        <main class="projects-ledger">
+          ${PROJECTS.map(p => `
+            <article class="project-row" id="${p.id}">
+              <div class="project-header" tabindex="0" role="button" aria-expanded="false">
+                <div class="project-title-group">
+                  <span class="square-bullet" aria-hidden="true"></span>
+                  <span class="project-title">${p.title}</span>
+                </div>
+                <div class="project-header-right">
+                  <span class="project-year">${p.year}</span>
+                  <span class="toggle-arrow" aria-hidden="true">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M6 2.5v7m0 0l-3.5-3.5m3.5 3.5l3.5-3.5"/>
+                    </svg>
+                  </span>
+                </div>
+              </div>
+              <div class="project-body">
+                <div class="project-meta-bar">
                   <span class="project-stack">${p.stack}</span>
                 </div>
-              </div>
-              <div class="header-right">
-                <span class="project-year">${p.year}</span>
+                <p class="project-desc">${p.desc}</p>
                 <div class="project-actions">
-                  ${p.links.map(l => `<a href="${l.url}" class="btn" target="_blank" rel="noopener" onclick="event.stopPropagation()">${l.label}</a>`).join('')}
+                  ${p.links.map(l => `<a href="${l.url}" class="btn" target="_blank" rel="noopener">${l.label}</a>`).join('')}
                 </div>
+                ${(p.imageLight && p.imageDark) ? `
+                  <div class="project-preview">
+                    <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
+                      <img src="${p.imageLight}" alt="${p.title} light preview" class="preview-img img-light">
+                      <img src="${p.imageDark}" alt="${p.title} dark preview" class="preview-img img-dark">
+                    </a>
+                  </div>
+                ` : (p.image ? `
+                  <div class="project-preview">
+                    <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
+                      <img src="${p.image}" alt="${p.title} preview" class="preview-img">
+                    </a>
+                  </div>
+                ` : '')}
               </div>
-            </div>
-            <div class="project-body">
-              <p class="project-desc">${p.desc}</p>
-              ${(p.imageLight && p.imageDark) ? `
-                <div class="project-preview">
-                  <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
-                    <img src="${p.imageLight}" alt="${p.title} light preview" class="preview-img img-light">
-                    <img src="${p.imageDark}" alt="${p.title} dark preview" class="preview-img img-dark">
-                  </a>
-                </div>
-              ` : (p.image ? `
-                <div class="project-preview">
-                  <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
-                    <img src="${p.image}" alt="${p.title} preview" class="preview-img">
-                  </a>
-                </div>
-              ` : '')}
-            </div>
-          </article>
-        `).join('')}
-      </main>
+            </article>
+          `).join('')}
+        </main>
+      </section>
     `;
 
     document.body.appendChild(container);
@@ -148,11 +158,11 @@
     function applyTheme(isDark) {
       if (isDark) {
         document.body.classList.add('dark-mode');
-        if (themeBtn) themeBtn.textContent = 'light';
+        if (themeBtn) themeBtn.textContent = 'Light';
         localStorage.setItem('hub_theme', 'dark');
       } else {
         document.body.classList.remove('dark-mode');
-        if (themeBtn) themeBtn.textContent = 'dark';
+        if (themeBtn) themeBtn.textContent = 'Dark';
         localStorage.setItem('hub_theme', 'light');
       }
       const canvas = document.getElementById('bg-canvas');
@@ -183,11 +193,9 @@
     const projectRows = document.querySelectorAll('.project-row');
     projectRows.forEach(row => {
       const header = row.querySelector('.project-header');
-      const indicator = row.querySelector('.toggle-indicator');
 
       function toggle() {
         const isExp = row.classList.toggle('expanded');
-        if (indicator) indicator.textContent = isExp ? '−' : '+';
         if (header) header.setAttribute('aria-expanded', isExp ? 'true' : 'false');
         updateGlobalToggleLabel();
       }
@@ -203,27 +211,24 @@
       }
     });
 
-    // Global [+ expand all] / [− collapse all] button
+    // Global [Expand All] / [Collapse All] button
     const toggleAllBtn = document.getElementById('btn-toggle-all');
     function updateGlobalToggleLabel() {
       if (!toggleAllBtn) return;
       const anyCollapsed = Array.from(projectRows).some(row => !row.classList.contains('expanded'));
-      toggleAllBtn.textContent = anyCollapsed ? '+ expand all' : '− collapse all';
+      toggleAllBtn.textContent = anyCollapsed ? 'Expand All' : 'Collapse All';
     }
 
     if (toggleAllBtn) {
       toggleAllBtn.addEventListener('click', () => {
         const anyCollapsed = Array.from(projectRows).some(row => !row.classList.contains('expanded'));
         projectRows.forEach(row => {
-          const indicator = row.querySelector('.toggle-indicator');
           const header = row.querySelector('.project-header');
           if (anyCollapsed) {
             row.classList.add('expanded');
-            if (indicator) indicator.textContent = '−';
             if (header) header.setAttribute('aria-expanded', 'true');
           } else {
             row.classList.remove('expanded');
-            if (indicator) indicator.textContent = '+';
             if (header) header.setAttribute('aria-expanded', 'false');
           }
         });
@@ -254,15 +259,53 @@
     const GRID_SIZE = 32;
     let lifeState = null;
 
+    function getClearBounds(cols, rows) {
+      const bounds = [];
+      const masthead = document.querySelector('.masthead');
+      if (masthead) {
+        const r = masthead.getBoundingClientRect();
+        bounds.push({
+          minC: Math.max(0, Math.floor(r.left / GRID_SIZE) - 1),
+          maxC: Math.min(cols - 1, Math.ceil(r.right / GRID_SIZE)),
+          minR: Math.max(0, Math.floor(r.top / GRID_SIZE) - 1),
+          maxR: Math.min(rows - 1, Math.ceil(r.bottom / GRID_SIZE))
+        });
+      }
+
+      const projects = document.querySelector('.projects-section');
+      if (projects) {
+        const r = projects.getBoundingClientRect();
+        bounds.push({
+          minC: Math.max(0, Math.floor(r.left / GRID_SIZE) - 1),
+          maxC: Math.min(cols - 1, Math.ceil(r.right / GRID_SIZE)),
+          minR: Math.max(0, Math.floor(r.top / GRID_SIZE) - 1),
+          maxR: Math.min(rows - 1, Math.ceil(r.bottom / GRID_SIZE))
+        });
+      }
+      return bounds;
+    }
+
+    function isInClearZone(c, r, bounds) {
+      if (r < 5) return true;
+      for (let i = 0; i < bounds.length; i++) {
+        const b = bounds[i];
+        if (c >= b.minC && c <= b.maxC && r >= b.minR && r <= b.maxR) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     function computeLifeState(cols, rows) {
       const size = cols * rows;
       let grid = new Uint8Array(size);
       let next = new Uint8Array(size);
+      const clearBounds = getClearBounds(cols, rows);
 
-      // Seed sparsely (~14% random probability), keeping the top rows clear for masthead
+      // Seed sparsely (~14% random probability), keeping masthead and projects section clear
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          grid[r * cols + c] = (r < 5) ? 0 : (Math.random() < 0.14 ? 1 : 0);
+          grid[r * cols + c] = isInClearZone(c, r, clearBounds) ? 0 : (Math.random() < 0.14 ? 1 : 0);
         }
       }
 
@@ -275,7 +318,7 @@
           const rNext = (r === rows - 1 ? 0 : r + 1) * cols;
 
           for (let c = 0; c < cols; c++) {
-            if (r < 5) {
+            if (isInClearZone(c, r, clearBounds)) {
               next[rCurr + c] = 0;
               continue;
             }
@@ -315,6 +358,7 @@
       const size = cols * rows;
       let next = new Uint8Array(size);
       let aliveCount = 0;
+      const clearBounds = getClearBounds(cols, rows);
 
       for (let r = 0; r < rows; r++) {
         const rPrev = (r === 0 ? rows - 1 : r - 1) * cols;
@@ -322,7 +366,7 @@
         const rNext = (r === rows - 1 ? 0 : r + 1) * cols;
 
         for (let c = 0; c < cols; c++) {
-          if (r < 5) {
+          if (isInClearZone(c, r, clearBounds)) {
             next[rCurr + c] = 0;
             continue;
           }
@@ -358,9 +402,11 @@
 
       // If all cells died out, reseed sparsely
       if (aliveCount === 0) {
-        for (let r = 5; r < rows; r++) {
+        for (let r = 0; r < rows; r++) {
           for (let c = 0; c < cols; c++) {
-            if (Math.random() < 0.12) next[r * cols + c] = 1;
+            if (!isInClearZone(c, r, clearBounds) && Math.random() < 0.12) {
+              next[r * cols + c] = 1;
+            }
           }
         }
       }
@@ -388,7 +434,6 @@
       }
 
       const isDark = document.body.classList.contains('dark-mode');
-      const dotColor = isDark ? 'rgba(240, 240, 240, 0.20)' : 'rgba(0, 0, 0, 0.20)';
       // Faint green hue matching the title highlight
       const squareStroke = isDark ? 'rgba(144, 238, 144, 0.26)' : 'rgba(74, 150, 74, 0.28)';
       const squareFill = isDark ? 'rgba(144, 238, 144, 0.04)' : 'rgba(144, 238, 144, 0.06)';
@@ -406,16 +451,6 @@
             ctx.fillRect(x, y, GRID_SIZE, GRID_SIZE);
             ctx.strokeRect(x, y, GRID_SIZE, GRID_SIZE);
           }
-        }
-      }
-
-      // 2. Draw clean, subtle dot matrix (no plus signs)
-      ctx.fillStyle = dotColor;
-      for (let c = 0; c < cols; c++) {
-        for (let r = 0; r < rows; r++) {
-          ctx.beginPath();
-          ctx.arc(c * GRID_SIZE, r * GRID_SIZE, 1.0, 0, Math.PI * 2);
-          ctx.fill();
         }
       }
 
