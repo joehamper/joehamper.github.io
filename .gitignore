@@ -3,3 +3,7 @@
 *~
 .idea/
 .vscode/
+
+# Local demo symlinks (separate repos)
+energy-and-gdp
+energy-and-gdp/
