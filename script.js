@@ -1,7 +1,7 @@
 /**
  * HUB 0.2 // DEMO SHOWCASE
- * Client script: showcases project demos with subtle ASCII parallax background
- * and frosted backdrop-filter foreground elements.
+ * Client script: showcases project demos with responsive technical dot grid
+ * and frosted backdrop-filter glass panels.
  */
 
 (function () {
@@ -12,6 +12,7 @@
       id: 'energy-and-gdp',
       title: 'global energy & gdp observatory',
       desc: 'data visualisation of global energy production and GDP, including carbon intensity and decoupling.',
+      image: 'assets/energy-and-gdp-preview.png',
       links: [
         { label: 'demo', url: 'energy-and-gdp/' },
         { label: 'code', url: 'https://github.com/joehamper/energy-and-gdp' }
@@ -78,6 +79,13 @@
               </div>
             </div>
             <p class="project-desc">${p.desc}</p>
+            ${p.image ? `
+              <div class="project-preview">
+                <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title} Demo">
+                  <img src="${p.image}" alt="${p.title} interactive preview" class="preview-img">
+                </a>
+              </div>
+            ` : ''}
           </article>
         `).join('')}
       </main>
@@ -97,7 +105,7 @@
     document.body.appendChild(container);
 
     bindEvents();
-    initParallax(canvas);
+    initDotGridParallax(canvas);
   }
 
   // --------------------------------------------------------------------------
@@ -138,9 +146,9 @@
   }
 
   // --------------------------------------------------------------------------
-  // SUBTLE SPARSE ASCII PARALLAX ENGINE
+  // VISIBLE TECHNICAL DOT GRID PARALLAX ENGINE
   // --------------------------------------------------------------------------
-  function initParallax(canvas) {
+  function initDotGridParallax(canvas) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -148,25 +156,10 @@
     let height = 0;
     let dpr = 1;
 
-    // ASCII characters: sparse technical glyphs
-    const GLYPHS = ['+', '·', '×', '0', '1', ':', '¬', '°', '/', '_', '•', '~', '|', '^'];
-    
-    // Generate sparse points distributed across normalized canvas coordinates
-    const NUM_CHARS = 55;
-    const particles = [];
+    // Technical grid parameters
+    const GRID_SIZE = 32; // pixel pitch between dots
+    const MAJOR_MULT = 4; // every 4th grid point is a crosshair
 
-    for (let i = 0; i < NUM_CHARS; i++) {
-      particles.push({
-        x: Math.random(),
-        y: Math.random(),
-        char: GLYPHS[Math.floor(Math.random() * GLYPHS.length)],
-        depth: 0.15 + Math.random() * 0.85, // parallax depth factor
-        opacity: 0.08 + Math.random() * 0.14,
-        size: Math.random() > 0.6 ? 14 : 12
-      });
-    }
-
-    // Parallax mouse & scroll state
     let targetMouseX = 0;
     let targetMouseY = 0;
     let mouseX = 0;
@@ -194,39 +187,50 @@
 
     resize();
 
-    // Render loop with smooth easing
     function draw() {
-      // Lerp mouse
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
+      // Smooth lerp mouse tracking
+      mouseX += (targetMouseX - mouseX) * 0.06;
+      mouseY += (targetMouseY - mouseY) * 0.06;
 
       ctx.clearRect(0, 0, width, height);
 
       const isDark = document.body.classList.contains('dark-mode');
-      const baseColor = isDark ? '240, 240, 240' : '0, 0, 0';
+      const dotColor = isDark ? 'rgba(240, 240, 240, 0.22)' : 'rgba(0, 0, 0, 0.22)';
+      const crossColor = isDark ? 'rgba(240, 240, 240, 0.38)' : 'rgba(0, 0, 0, 0.38)';
 
-      ctx.textBaseline = 'middle';
-      ctx.textAlign = 'center';
+      // Parallax translation
+      const shiftX = (mouseX * 30) % GRID_SIZE;
+      const shiftY = ((mouseY * 30) - (scrollY * 0.2)) % GRID_SIZE;
 
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
+      const startX = -GRID_SIZE + shiftX;
+      const startY = -GRID_SIZE + shiftY;
 
-        // Parallax shift calculation based on individual depth
-        const shiftX = mouseX * 60 * p.depth;
-        const shiftY = (mouseY * 60 * p.depth) - ((scrollY * 0.12 * p.depth) % height);
+      // Draw dot matrix & coordinate crosshairs
+      for (let x = startX; x < width + GRID_SIZE; x += GRID_SIZE) {
+        for (let y = startY; y < height + GRID_SIZE; y += GRID_SIZE) {
+          const gridCol = Math.round((x - shiftX) / GRID_SIZE);
+          const gridRow = Math.round((y - shiftY) / GRID_SIZE);
 
-        let posX = (p.x * width) + shiftX;
-        let posY = (p.y * height) + shiftY;
+          const isMajor = (gridCol % MAJOR_MULT === 0) && (gridRow % MAJOR_MULT === 0);
 
-        // Wrap around viewport edges
-        if (posX < 0) posX += width;
-        if (posX > width) posX -= width;
-        if (posY < 0) posY += height;
-        if (posY > height) posY -= height;
-
-        ctx.font = `${p.size}px "GohuFont", monospace`;
-        ctx.fillStyle = `rgba(${baseColor}, ${p.opacity})`;
-        ctx.fillText(p.char, posX, posY);
+          if (isMajor) {
+            // Crisp crosshair '+' at major coordinate intervals
+            ctx.strokeStyle = crossColor;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(x - 3, y);
+            ctx.lineTo(x + 3, y);
+            ctx.moveTo(x, y - 3);
+            ctx.lineTo(x, y + 3);
+            ctx.stroke();
+          } else {
+            // Clean circular dot
+            ctx.fillStyle = dotColor;
+            ctx.beginPath();
+            ctx.arc(x, y, 1.1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
       }
 
       requestAnimationFrame(draw);
