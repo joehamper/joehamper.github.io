@@ -1,10 +1,10 @@
 /* ==========================================================================
-   HUB 0.2 // UTILITARIAN TECH (TYPESETTING & PARALLAX GRID)
+   HUB 0.2 // UTILITARIAN TECH (GLASSMORPHISM & COLLAPSIBLE TILES)
    - Strict monochrome (black & white)
    - 1px hairline borders, zero border-radius
    - Generous vertical whitespace
-   - Frosted backdrop-filter blur on foreground elements
-   - Visible dot matrix / coordinate grid parallax background
+   - Frosted glassmorphic tiles with subtle edge reflections
+   - Static technical dot matrix background
    ========================================================================== */
 
 @font-face {
@@ -21,8 +21,9 @@
   --fg-muted: #555555;
   --border: #000000;
   --border-subtle: #eaeaea;
-  --surface-glass: rgba(255, 255, 255, 0.80);
-  --surface-glass-hover: rgba(255, 255, 255, 0.94);
+  --surface-glass: rgba(255, 255, 255, 0.68);
+  --surface-glass-hover: rgba(255, 255, 255, 0.88);
+  --glass-reflection: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 8px 32px rgba(0, 0, 0, 0.04);
   --surface-inv: #000000;
   --fg-inv: #ffffff;
   
@@ -30,15 +31,16 @@
 }
 
 body.dark-mode {
-  --bg: #0c0c0c;
+  --bg: #0a0a0a;
   --fg: #f5f5f5;
   --fg-muted: #888888;
   --border: #f5f5f5;
   --border-subtle: #222222;
-  --surface-glass: rgba(12, 12, 12, 0.80);
-  --surface-glass-hover: rgba(12, 12, 12, 0.94);
+  --surface-glass: rgba(14, 14, 14, 0.68);
+  --surface-glass-hover: rgba(14, 14, 14, 0.88);
+  --glass-reflection: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 8px 32px rgba(0, 0, 0, 0.45);
   --surface-inv: #f5f5f5;
-  --fg-inv: #0c0c0c;
+  --fg-inv: #0a0a0a;
 }
 
 * {
@@ -68,7 +70,7 @@ body {
 }
 
 /* --------------------------------------------------------------------------
-   FIXED PARALLAX CANVAS BACKGROUND
+   STATIC BACKGROUND CANVAS (CRISP DOT MATRIX)
    -------------------------------------------------------------------------- */
 #bg-canvas {
   position: fixed;
@@ -88,13 +90,13 @@ body {
   max-width: 860px;
   display: flex;
   flex-direction: column;
-  gap: 80px;
+  gap: 72px;
   position: relative;
   z-index: 1;
 }
 
 /* --------------------------------------------------------------------------
-   MASTHEAD (FROSTED GLASS PANEL)
+   MASTHEAD (GLASS PANEL)
    -------------------------------------------------------------------------- */
 .masthead {
   display: flex;
@@ -105,8 +107,9 @@ body {
   padding: 28px 32px;
   border: 1px solid var(--border);
   background-color: var(--surface-glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: var(--glass-reflection);
 }
 
 .identity {
@@ -116,7 +119,7 @@ body {
 }
 
 .name {
-  font-size: 34px;
+  font-size: 32px;
   font-weight: bold;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -164,25 +167,35 @@ body {
   opacity: 0.8;
 }
 
+.btn-toggle {
+  border-color: var(--border-subtle);
+  color: var(--fg-muted);
+}
+
+.btn-toggle:hover {
+  border-color: var(--border);
+  color: var(--fg-inv);
+}
+
 /* --------------------------------------------------------------------------
-   PROJECTS (FROSTED BRUTALIST PANELS WITH PREVIEW TILES)
+   PROJECT TILES (COLLAPSIBLE GLASS PANELS)
    -------------------------------------------------------------------------- */
 .projects {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 20px;
 }
 
 .project-item {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 28px 32px;
+  padding: 22px 28px;
   border: 1px solid var(--border-subtle);
   background-color: var(--surface-glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: var(--glass-reflection);
+  transition: border-color 0.15s ease, background-color 0.15s ease, padding 0.15s ease;
 }
 
 .project-item:hover {
@@ -190,16 +203,41 @@ body {
   background-color: var(--surface-glass-hover);
 }
 
+.project-item.expanded {
+  padding: 26px 28px 28px;
+}
+
 .project-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 20px;
-  flex-wrap: wrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toggle-indicator {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--fg-muted);
+  width: 16px;
+  display: inline-flex;
+  justify-content: center;
+  transition: color 0.1s ease;
+}
+
+.project-header:hover .toggle-indicator {
+  color: var(--fg);
 }
 
 .project-title {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: bold;
   color: var(--fg);
   letter-spacing: -0.01em;
@@ -210,6 +248,20 @@ body {
   gap: 8px;
 }
 
+/* Collapsible Content Body */
+.project-body {
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.project-item.expanded .project-body {
+  display: flex;
+}
+
 .project-desc {
   font-size: 15px;
   color: var(--fg-muted);
@@ -217,9 +269,9 @@ body {
   max-width: 720px;
 }
 
-/* Embedded Demo Preview Image */
+/* Embedded Demo Preview Image (Light / Dark responsive) */
 .project-preview {
-  margin-top: 6px;
+  margin-top: 4px;
   border: 1px solid var(--border-subtle);
   overflow: hidden;
   background-color: #000000;
@@ -243,16 +295,25 @@ body {
   object-fit: cover;
   object-position: top center;
   display: block;
-  opacity: 0.94;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  opacity: 0.96;
+  transition: opacity 0.2s ease;
 }
 
 .preview-link:hover .preview-img {
   opacity: 1.0;
 }
 
+/* Light / Dark Mode Image Toggle */
+body:not(.dark-mode) .img-dark {
+  display: none;
+}
+
+body.dark-mode .img-light {
+  display: none;
+}
+
 /* --------------------------------------------------------------------------
-   FOOTER (FROSTED PANEL)
+   FOOTER (GLASS PANEL - NO "JOE")
    -------------------------------------------------------------------------- */
 .footer {
   display: flex;
@@ -261,8 +322,9 @@ body {
   padding: 20px 32px;
   border: 1px solid var(--border-subtle);
   background-color: var(--surface-glass);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  box-shadow: var(--glass-reflection);
   font-size: 13px;
   color: var(--fg-muted);
   flex-wrap: wrap;
@@ -303,12 +365,17 @@ body {
   }
 
   .name {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .project-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 12px;
+  }
+
+  .project-actions {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
