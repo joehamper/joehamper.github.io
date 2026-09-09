@@ -73,6 +73,7 @@
         <div class="identity">
           <h1 class="name">joseph hamper</h1>
           <div class="discipline">quantitative analytics + systems</div>
+          <p class="header-bio">a collection of small coding projects i have worked on in my spare time, spanning quantitative analytics, energy storage systems, and data tools.</p>
         </div>
         <nav class="nav">
           <button id="btn-toggle-all" class="btn btn-toggle">+ expand all</button>
@@ -388,8 +389,9 @@
 
       const isDark = document.body.classList.contains('dark-mode');
       const dotColor = isDark ? 'rgba(240, 240, 240, 0.20)' : 'rgba(0, 0, 0, 0.20)';
-      const squareStroke = isDark ? 'rgba(240, 240, 240, 0.24)' : 'rgba(0, 0, 0, 0.24)';
-      const squareFill = isDark ? 'rgba(240, 240, 240, 0.03)' : 'rgba(0, 0, 0, 0.03)';
+      // Faint green hue matching the title highlight
+      const squareStroke = isDark ? 'rgba(144, 238, 144, 0.26)' : 'rgba(74, 150, 74, 0.28)';
+      const squareFill = isDark ? 'rgba(144, 238, 144, 0.04)' : 'rgba(144, 238, 144, 0.06)';
 
       // 1. Draw Conway Game of Life surviving cells as hairline squares
       ctx.strokeStyle = squareStroke;

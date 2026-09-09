@@ -54,7 +54,6 @@ body.dark-mode {
 html {
   background-color: var(--bg);
   color: var(--fg);
-  font-family: var(--font-mono);
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -125,8 +124,17 @@ body {
 }
 
 .discipline {
+  font-family: var(--font-mono);
   font-size: 15px;
   color: var(--fg-muted);
+}
+
+.header-bio {
+  font-size: 15px;
+  color: var(--fg-muted);
+  margin-top: 8px;
+  line-height: 1.5;
+  max-width: 580px;
 }
 
 .nav {
@@ -218,6 +226,7 @@ body {
 }
 
 .toggle-indicator {
+  font-family: var(--font-mono);
   font-size: 15px;
   font-weight: bold;
   color: var(--fg-muted);
@@ -225,7 +234,7 @@ body {
   line-height: 1.3;
   display: inline-flex;
   justify-content: center;
-  margin-top: 1px;
+  margin-top: 11px;
 }
 
 .title-and-stack {
@@ -235,13 +244,22 @@ body {
 }
 
 .project-title {
+  display: inline-block;
+  width: fit-content;
   font-size: 19px;
   font-weight: bold;
   color: var(--fg);
   letter-spacing: -0.01em;
+  background: rgba(144, 238, 144, 0.46);
+  padding: 0px 10px;
+}
+
+body.dark-mode .project-title {
+  background: rgba(144, 238, 144, 0.28);
 }
 
 .project-stack {
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--fg-muted);
   letter-spacing: 0.02em;
@@ -255,6 +273,7 @@ body {
 }
 
 .project-year {
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--fg-subtle);
 }
