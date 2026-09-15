@@ -13,7 +13,7 @@
       title: 'global energy & gdp observatory',
       year: '2026',
       stack: 'vanilla js · d3.js · maplibre gl',
-      desc: 'data visualisation of global energy production and GDP, including carbon intensity and decoupling.',
+      desc: 'Data visualisation of global energy production and GDP, including carbon intensity and decoupling.',
       imageLight: 'assets/energy-and-gdp-preview.png',
       imageDark: 'assets/energy-and-gdp-preview-dark.png',
       links: [
@@ -22,11 +22,20 @@
       ]
     },
     {
+      id: 'emissions-matrix',
+      title: 'corporate emissions & energy matrix NLP',
+      year: '2026',
+      stack: 'python · agy · vanilla js',
+      desc: 'Multi-pass extraction pipeline converting unstructured corporate sustainability filings and heterogeneous reporting units (tCO2e, PJ, GWh) into a standardized emissions & energy panel.',
+      image: 'assets/emissions-matrix-preview.png',
+      links: []
+    },
+    {
       id: 'renewables-costing',
       title: 'renewable storage valuation (psh)',
       year: '2025',
       stack: 'python · numpy-financial · latex',
-      desc: 'capital budgeting & multi-decadal valuation framework comparing modular micro-psh, strategic 200mw pumped hydro, and utility bess under dynamic market saturation.',
+      desc: 'Capital budgeting & multi-decadal valuation framework comparing modular micro-PSH, strategic 200MW pumped hydro, and utility BESS under dynamic market saturation.',
       image: 'assets/psh-roi-trajectory.png',
       links: [
         { label: 'pdf', url: 'assets/psh_costing.pdf' },
@@ -38,20 +47,9 @@
       title: 'quant equities & spike predictor',
       year: '2023',
       stack: 'r · python · wrds feeds',
-      desc: 'momentum and volatility spike forecasting using historical WRDS feeds with analytical leaderboards.',
+      desc: 'Momentum and volatility spike forecasting using historical WRDS feeds with analytical leaderboards.',
       links: [
         { label: 'code', url: 'https://github.com/joehamper/stock_picker_game' }
-      ]
-    },
-    {
-      id: 'emissions-matrix',
-      title: 'corporate emissions & energy matrix',
-      year: '2026',
-      stack: 'python · agy · vanilla js',
-      desc: 'multi-pass extraction pipeline converting unstructured corporate sustainability filings and heterogeneous reporting units (tCO2e, PJ, GWh) into a standardized emissions & energy panel.',
-      image: 'assets/emissions-matrix-preview.png',
-      links: [
-        { label: 'code', url: 'https://github.com/joehamper/data_extractionv2' }
       ]
     }
   ];
@@ -110,21 +108,23 @@
                   <span class="project-stack">${p.stack}</span>
                 </div>
                 <p class="project-desc">${p.desc}</p>
-                <div class="project-actions">
-                  ${p.links.map(l => `<a href="${l.url}" class="btn" target="_blank" rel="noopener">${l.label}</a>`).join('')}
-                </div>
+                ${(p.links && p.links.length) ? `
+                  <div class="project-actions">
+                    ${p.links.map(l => `<a href="${l.url}" class="btn" target="_blank" rel="noopener">${l.label}</a>`).join('')}
+                  </div>
+                ` : ''}
                 ${(p.imageLight && p.imageDark) ? `
                   <div class="project-preview">
-                    <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
+                    ${(p.links && p.links.length) ? `<a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">` : ''}
                       <img src="${p.imageLight}" alt="${p.title} light preview" class="preview-img img-light">
                       <img src="${p.imageDark}" alt="${p.title} dark preview" class="preview-img img-dark">
-                    </a>
+                    ${(p.links && p.links.length) ? `</a>` : ''}
                   </div>
                 ` : (p.image ? `
                   <div class="project-preview">
-                    <a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">
+                    ${(p.links && p.links.length) ? `<a href="${p.links[0].url}" target="_blank" rel="noopener" class="preview-link" title="Open ${p.title}">` : ''}
                       <img src="${p.image}" alt="${p.title} preview" class="preview-img">
-                    </a>
+                    ${(p.links && p.links.length) ? `</a>` : ''}
                   </div>
                 ` : '')}
               </div>
