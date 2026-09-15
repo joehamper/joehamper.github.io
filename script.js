@@ -23,10 +23,10 @@
     },
     {
       id: 'emissions-matrix',
-      title: 'corporate emissions & energy matrix NLP',
+      title: 'corporate emissions & energy NLP',
       year: '2026',
-      stack: 'python · agy · vanilla js',
-      desc: 'Multi-pass extraction pipeline converting unstructured corporate sustainability filings and heterogeneous reporting units (tCO2e, PJ, GWh) into a standardized emissions & energy panel.',
+      stack: 'python · vanilla js',
+      desc: 'Automating data extraction from inconsistent, unstructured formats, with full transparency and auditability.',
       image: 'assets/emissions-matrix-preview.png',
       links: []
     },
