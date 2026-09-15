@@ -44,11 +44,12 @@
       ]
     },
     {
-      id: 'data-extraction',
-      title: 'corporate sustainability (esrs) nlp',
-      year: '2024',
-      stack: 'python · pymupdf · quantulum3',
-      desc: 'document AI pipeline extracting physical metrics and units from corporate filings for CSRD compliance.',
+      id: 'emissions-matrix',
+      title: 'corporate emissions & energy matrix',
+      year: '2026',
+      stack: 'python · agy · vanilla js',
+      desc: 'multi-pass extraction pipeline converting unstructured corporate sustainability filings and heterogeneous reporting units (tCO2e, PJ, GWh) into a standardized emissions & energy panel.',
+      image: 'assets/emissions-matrix-preview.png',
       links: [
         { label: 'code', url: 'https://github.com/joehamper/data_extractionv2' }
       ]
