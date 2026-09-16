@@ -1,11 +1,5 @@
 /* ==========================================================================
-   HUB 0.2 // UTILITARIAN TECH (MONOLITHIC LEDGER & MINIMAL MASTHEAD)
-   - Strict monochrome (black & white)
-   - 1px hairline borders, zero border-radius
-   - Mathematical 32px grid-snapped spacing
-   - Flush borderless masthead aligned with ledger datums
-   - Unified project ledger (continuous architectural matrix)
-   - No redundant footer
+   HUB 0.2 
    ========================================================================== */
 
 @font-face {
@@ -29,9 +23,9 @@
   --surface-inv: #000000;
   --fg-inv: #ffffff;
 
-  --font-mono:
-    "GohuFont", ui-monospace, "SF Mono", Menlo, Monaco, Consolas,
-    "Liberation Mono", monospace;
+  /* --font-mono: */
+  /*   "GohuFont", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, */
+  /*   "Liberation Mono", monospace; */
   --grid-unit: 32px;
 }
 
@@ -61,6 +55,7 @@ html {
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-family: sans-serif;
 }
 
 body {
@@ -120,7 +115,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
 }
 
 .name {
